@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/callFragment2"
+        android:title="Call"
+        android:icon="@drawable/call" />
+    <item
+        android:id="@+id/homeFragment2"
+        android:title="Home"
+        android:icon="@drawable/home"/>
+    <item
+        android:id="@+id/settingFragment2"
+        android:title="Setting"
+        android:icon="@drawable/settings"
+        android:iconTint="@color/teal_200"/>
+</menu>
