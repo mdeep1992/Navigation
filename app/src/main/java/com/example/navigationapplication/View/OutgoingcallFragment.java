@@ -1,4 +1,4 @@
-package com.example.navigationapplication;
+package com.example.navigationapplication.View;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.navigationapplication.R;
 
 
 public class OutgoingcallFragment extends Fragment {

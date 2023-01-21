@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/callFragment2"
-        android:name="com.example.navigationapplication.CallFragment"
+        android:name="com.example.navigationapplication.View.CallFragment"
         android:label="fragment_call"
         tools:layout="@layout/fragment_call" />
     <fragment
         android:id="@+id/homeFragment2"
-        android:name="com.example.navigationapplication.HomeFragment"
+        android:name="com.example.navigationapplication.View.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/settingFragment2"
-        android:name="com.example.navigationapplication.SettingFragment"
+        android:name="com.example.navigationapplication.View.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
 </navigation>

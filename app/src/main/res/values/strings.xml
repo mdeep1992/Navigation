@@ -10,4 +10,7 @@
     <string name="home">Home</string>
     <string name="incomingcall">Incoming call</string>
     <string name="outgoingcall">Outgoing Call</string>
+    <string name="Add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.navigationapplication;
+package com.example.navigationapplication.View;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.navigationapplication.R;
+import com.example.navigationapplication.Adapter.ViewpagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 
