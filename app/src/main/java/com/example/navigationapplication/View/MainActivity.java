@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navi);
         toolbar = findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
-//        toolbar.setVisibility(View.GONE);
+        toolbar.setVisibility(View.GONE);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment);
         navCo = navHostFragment.getNavController();
@@ -46,15 +46,17 @@ public class MainActivity extends AppCompatActivity {
         navCo.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
-                if (navDestination.getLabel().equals("callFragment2")) {
+                Log.e("label", navDestination.getLabel().toString() );
+
+                if (navDestination.getLabel().equals("fragment_call")) {
                     Log.e("label1", navDestination.getLabel().toString() );
                     title.setText(getResources().getString(R.string.call));
                     toolbar.setVisibility(View.VISIBLE);
-                } else if (navDestination.getLabel().equals("homeFragment2")) {
+                } else if (navDestination.getLabel().equals("fragment_home")) {
                     Log.e("label2", navDestination.getLabel().toString() );
                     title.setText(getResources().getString(R.string.home));
                     toolbar.setVisibility(View.VISIBLE);
-                } else if (navDestination.getLabel().equals("settingFragment2")) {
+                } else if (navDestination.getLabel().equals("fragment_setting")) {
                     Log.e("label3", navDestination.getLabel().toString() );
                         title.setText(getResources().getString(R.string.setting));
                         toolbar.setVisibility(View.VISIBLE);

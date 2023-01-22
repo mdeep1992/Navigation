@@ -65,16 +65,54 @@ public class HomeFragment extends Fragment {
         adapter = new RoomUserAdapter(getContext(), userlist, new Listener() {
             @Override
             public void onUpdate(int position) {
-                Toast.makeText(getContext(), "update", Toast.LENGTH_SHORT).show();
+                Dialog dialog1 = new Dialog(getContext());
+                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog1.setContentView(R.layout.dialogue_add);
+                EditText name_upd = dialog1.findViewById(R.id.ed_name);
+                Button okbtn = dialog1.findViewById(R.id.okbtn);
+                Button cancelbtn = dialog1.findViewById(R.id.cancelbtn);
+                name_upd.setText(userlist.get(position).getName());
+                int id=userlist.get(position).getUid();
+                okbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (name_upd.getText().toString().trim().isEmpty()) {
+                            Toast.makeText(getContext(), "please enter the name", Toast.LENGTH_SHORT).show();
+                        } else {
+//                          do update name
+                            String nameupd = name_upd.getText().toString().trim();
+
+                            userDao.Updateuser(nameupd,id);
+                            fetchdata();
+                            dialog1.dismiss();
+                            Toast.makeText(getContext(), " Name updated successfully", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+                cancelbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog1.dismiss();
+
+                    }
+                });
+                dialog1.show();
             }
 
             @Override
             public void onDelete(int position) {
-                Toast.makeText(getContext(), "delete", Toast.LENGTH_SHORT).show();
+
+                userDao.DeleteUser(userlist.get(position));
+                userlist.remove(position);
+                adapter.notifyItemRemoved(position);
+                Toast.makeText(getContext(), "user deleted successfully", Toast.LENGTH_SHORT).show();
             }
         });
         recycler.setAdapter(adapter);
         fetchdata();
+        adapter.notifyDataSetChanged();
+
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +134,7 @@ public class HomeFragment extends Fragment {
                             User user = new User();
                             user.setName(username);
                             userDao.InsertUser(user);
+                            fetchdata();
                             dialog1.dismiss();
                             Toast.makeText(getContext(), " Name added successfully", Toast.LENGTH_SHORT).show();
                         }
@@ -117,6 +156,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchdata() {
+        userlist.clear();
         userlist.addAll(userDao.getAllusers());
         adapter.notifyDataSetChanged();
     }

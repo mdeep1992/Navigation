@@ -13,9 +13,9 @@ public interface UserDao {
     @Insert
     void InsertUser(User user);
 
-
-    @Update
-    Void UpdateUser(User user);
+//
+//    @Update
+//    Void UpdateUser(User user);
 
     @Delete
     void DeleteUser(User user);
@@ -26,5 +26,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM users" )
     List<User> getAllusers();
+    @Query("UPDATE users SET name=:nameupd WHERE Uid= :uid")
+     void Updateuser(String nameupd ,int uid);
 }
 
