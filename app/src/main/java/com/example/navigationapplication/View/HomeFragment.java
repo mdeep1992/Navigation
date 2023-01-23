@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.example.navigationapplication.Room.UserDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -38,6 +36,8 @@ public class HomeFragment extends Fragment {
     UserDao userDao;
     RoomUserAdapter adapter;
     ArrayList<User> userlist = new ArrayList<>();
+    ArrayList<String> checkedlist=new ArrayList<>();
+
 
 
     @Override
@@ -108,6 +108,15 @@ public class HomeFragment extends Fragment {
                 adapter.notifyItemRemoved(position);
                 Toast.makeText(getContext(), "user deleted successfully", Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void oncheck(User position) {
+//                userDao.DeleteUser(checkedlist.get(position));
+//                checkedlist.remove(position);
+//                adapter.notifyItemRemoved(position);
+            }
+
+
         });
         recycler.setAdapter(adapter);
         fetchdata();
