@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,18 +27,19 @@ import com.example.navigationapplication.Room.UserDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
-    FloatingActionButton add_btn;
+    FloatingActionButton add_btn, delete_btn;
     RecyclerView recycler;
     ProgressBar progressBar;
     UserDatabase userDatabase;
     UserDao userDao;
     RoomUserAdapter adapter;
     ArrayList<User> userlist = new ArrayList<>();
-    ArrayList<String> checkedlist=new ArrayList<>();
-
+    ArrayList<User> chlist = new ArrayList<>();
+    SearchView searchView;
 
 
     @Override
@@ -56,6 +58,19 @@ public class HomeFragment extends Fragment {
 
         userDatabase = UserDatabase.getInstance(getContext());
         userDao = userDatabase.userDao();
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filteredlist(newText);
+                return true;
+            }
+        });
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recycler.setHasFixedSize(true);
@@ -72,7 +87,7 @@ public class HomeFragment extends Fragment {
                 Button okbtn = dialog1.findViewById(R.id.okbtn);
                 Button cancelbtn = dialog1.findViewById(R.id.cancelbtn);
                 name_upd.setText(userlist.get(position).getName());
-                int id=userlist.get(position).getUid();
+                int id = userlist.get(position).getUid();
                 okbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -82,7 +97,7 @@ public class HomeFragment extends Fragment {
 //                          do update name
                             String nameupd = name_upd.getText().toString().trim();
 
-                            userDao.Updateuser(nameupd,id);
+                            userDao.Updateuser(nameupd, id);
                             fetchdata();
                             dialog1.dismiss();
                             Toast.makeText(getContext(), " Name updated successfully", Toast.LENGTH_SHORT).show();
@@ -110,55 +125,69 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void oncheck(User position) {
-//                userDao.DeleteUser(checkedlist.get(position));
-//                checkedlist.remove(position);
-//                adapter.notifyItemRemoved(position);
+            public void oncheck(int position) {
+                if(!chlist.contains(userlist.get(position))){
+                chlist.add(userlist.get(position));
+            }
             }
 
-
+            @Override
+            public void onuncheck(int position) {
+                chlist.remove(userlist.get(position));
+            }
         });
         recycler.setAdapter(adapter);
         fetchdata();
         adapter.notifyDataSetChanged();
-
-        add_btn.setOnClickListener(new View.OnClickListener() {
+        delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                Dialog dialog1 = new Dialog(getContext());
-                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog1.setContentView(R.layout.dialogue_add);
-                EditText name = dialog1.findViewById(R.id.ed_name);
-                Button okbtn = dialog1.findViewById(R.id.okbtn);
-                Button cancelbtn = dialog1.findViewById(R.id.cancelbtn);
-                okbtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (name.getText().toString().trim().isEmpty()) {
-                            Toast.makeText(getContext(), "please enter the name", Toast.LENGTH_SHORT).show();
-                        } else {
-//                          do insert name
-                            String username = name.getText().toString().trim();
-                            User user = new User();
-                            user.setName(username);
-                            userDao.InsertUser(user);
-                            fetchdata();
-                            dialog1.dismiss();
-                            Toast.makeText(getContext(), " Name added successfully", Toast.LENGTH_SHORT).show();
-                        }
-
+            public void onClick(View v) {
+                if (chlist.isEmpty()){
+                    Toast.makeText(getContext(),"select any one",Toast.LENGTH_SHORT).show();
+                }else {
+                    for (User i : chlist) {
+                        userDao.DeleteUser(i);
                     }
-                });
-                cancelbtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog1.dismiss();
-
-                    }
-                });
-                dialog1.show();
+                    chlist.clear();
+                    fetchdata();
+                }
             }
+        });
+
+        add_btn.setOnClickListener(view -> {
+
+            Dialog dialog1 = new Dialog(getContext());
+            dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog1.setContentView(R.layout.dialogue_add);
+            EditText name = dialog1.findViewById(R.id.ed_name);
+            Button okbtn = dialog1.findViewById(R.id.okbtn);
+            Button cancelbtn = dialog1.findViewById(R.id.cancelbtn);
+            okbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (name.getText().toString().trim().isEmpty()) {
+                        Toast.makeText(getContext(), "please enter the name", Toast.LENGTH_SHORT).show();
+                    } else {
+//                          do insert name
+                        String username = name.getText().toString().trim();
+                        User user = new User();
+                        user.setName(username);
+                        userDao.InsertUser(user);
+                        fetchdata();
+                        dialog1.dismiss();
+                        Toast.makeText(getContext(), " Name added successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+            cancelbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog1.dismiss();
+
+                }
+            });
+            dialog1.show();
         });
 
         return rootview;
@@ -172,7 +201,24 @@ public class HomeFragment extends Fragment {
 
     private void doInitContent(View rootview) {
         add_btn = rootview.findViewById(R.id.add_btnhome);
+        delete_btn = rootview.findViewById(R.id.delete_btnhome);
         recycler = rootview.findViewById(R.id.recycler_home);
         progressBar = rootview.findViewById(R.id.progress_home);
+        searchView= rootview.findViewById(R.id.searchview);
+    }
+      private void filteredlist(String text) {
+        ArrayList<User> filteredlist=new ArrayList<>();
+        for(User list:userlist){
+            if(list.getName().toLowerCase().contains(text.toLowerCase())){
+                filteredlist.add(list);
+            }
+        }
+        if(filteredlist.isEmpty()){
+            Toast.makeText(getContext(), "no data available", Toast.LENGTH_SHORT).show();
+            filteredlist.clear();
+            adapter.setfilteredlist(filteredlist);
+        }else{
+            adapter.setfilteredlist(filteredlist);
+        }
     }
 }

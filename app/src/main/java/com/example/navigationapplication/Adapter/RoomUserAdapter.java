@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,21 +19,20 @@ import com.example.navigationapplication.Room.User;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RoomUserAdapter extends RecyclerView.Adapter<RoomUserAdapter.viewholder> {
     Context context;
     ArrayList<User> userlist;
     Listener listener;
-    ArrayList<User> checkedlist=new ArrayList<>();
 
     public RoomUserAdapter(Context context, ArrayList<User> userlist, Listener listener) {
         this.context = context;
         this.userlist = userlist;
         this.listener = listener;
     }
-
-    public void addusers(User user) {
-        userlist.add(user);
+    public void setfilteredlist(  ArrayList<User> filteredlist){
+        this.userlist=filteredlist;
         notifyDataSetChanged();
     }
 
@@ -47,27 +48,15 @@ public class RoomUserAdapter extends RecyclerView.Adapter<RoomUserAdapter.viewho
         int p = position;
         User user = userlist.get(position);
         holder.name.setText(user.getName());
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onUpdate(p);
-            }
-        });
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onDelete(p);
-            }
-        });
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.checkBox.isChecked()) {
-                    checkedlist.add(userlist.get(p));
-                } else {
-                    checkedlist.remove(userlist.get(p));
-                }
-                listener.oncheck(checkedlist.get(p));
+        holder.edit.setOnClickListener(view -> listener.onUpdate(p));
+        holder.delete.setOnClickListener(view -> listener.onDelete(p));
+//        holder.checkBox.setChecked(false);
+        holder.checkBox.setOnCheckedChangeListener(null);
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+            listener.oncheck(p);
+           }else{
+              listener.onuncheck(p);
             }
         });
 

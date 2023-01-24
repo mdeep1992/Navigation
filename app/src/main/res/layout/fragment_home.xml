@@ -5,18 +5,39 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".View.HomeFragment">
+  <androidx.appcompat.widget.SearchView
+      android:id="@+id/searchview"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="5dp"
+      android:background="@drawable/box_bg"/>
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recycler_home"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_below="@+id/searchview"
+      android:layout_marginTop="-7dp"
       android:padding="10dp" />
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/delete_btnhome"
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:layout_alignParentBottom="true"
+      app:fabCustomSize="50dp"
+      android:layout_alignParentRight="true"
+      android:layout_marginEnd="20dp"
+      app:srcCompat="@drawable/ic_baseline_delete_24"
+      app:backgroundTint="#E91E63"
+      app:tint="@color/white"
+      android:layout_marginBottom="100dp"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_btnhome"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        app:fabCustomSize="70dp"
+        app:fabCustomSize="50dp"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="20dp"
         app:srcCompat="@drawable/ic_baseline_add_24"
